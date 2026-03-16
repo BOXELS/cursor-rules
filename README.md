@@ -1,71 +1,119 @@
 # cursor-rules
 
-A starter template for [Cursor's](https://cursor.com) `.cursor/rules` — five markdown files that give AI full context on your project before you write a single line of code.
+A starter template for [Cursor's](https://cursor.com) `.cursor/rules` — five template files that teach AI everything about your project so it builds what you actually want.
 
-## Why this exists
+## What is this?
 
-Cursor rules are the single highest-leverage thing you can configure in a project. They tell the AI *what* you're building, *how* you build it, *what it should look like*, *where things go*, and *how to behave*. Without them, every conversation starts from zero. With them, the AI already knows your stack, your conventions, your design system, and your product.
+When you use Cursor to build an app, the AI starts every conversation knowing nothing about your project — your tech stack, your design preferences, who your users are, or how your code is organized. You end up repeating yourself constantly, and the AI makes generic choices that don't fit your vision.
 
-These five files are stack-agnostic templates. They work for React, Python, Go, Rails, Swift, Flutter — anything. Every technology-specific decision is a `[bracketed placeholder]` with inline examples so you know what to fill in.
+**Cursor rules fix that.** They're markdown files that live in your project and automatically feed context to the AI in every conversation. The problem is, writing them from scratch is intimidating — especially if you're new to coding.
+
+This template gives you five pre-structured rule files with `[bracketed placeholders]`. You don't need to fill them in manually. Just paste the starter prompt below into Cursor, and the AI will ask you about your project and fill everything in for you — including recommending a tech stack if you don't have one yet.
 
 ## What's included
 
 ```
 .cursor/
 └── rules/
-    ├── global-rules.md   # AI behavior, communication style, guardrails
-    ├── product.md         # What the product is, who it's for, roadmap
-    ├── tech.md            # Stack, conventions, security, testing, deployment
-    ├── design.md          # Components, states, spacing, colors, accessibility
-    └── structure.md       # Folder layout, file placement, naming conventions
+    ├── global-rules.md   # How the AI should behave and communicate with you
+    ├── product.md         # What you're building, who it's for, where it's going
+    ├── tech.md            # Tech stack, coding conventions, security, deployment
+    ├── design.md          # Visual style, components, colors, accessibility
+    └── structure.md       # Folder layout, file naming, where things go
 ```
 
 | File | What it does | Why it matters |
 |---|---|---|
-| **global-rules.md** | Defines how the AI should behave — when to ask vs. act, communication style, code quality standards | Prevents scope creep, unnecessary refactors, and verbose responses |
-| **product.md** | Describes the product, users, key flows, roadmap, tone of voice, competitors | Lets the AI make contextually appropriate decisions instead of generic ones |
-| **tech.md** | Documents the tech stack, coding conventions, data patterns, API structure, testing, deployment | Ensures consistent code that follows your standards without constant reminders |
-| **design.md** | Covers component library, interaction states, spacing, colors, accessibility | Produces polished UI with proper loading states, empty states, and a11y from the start |
-| **structure.md** | Maps the folder layout, file placement rules, naming conventions | Tells the AI exactly where to put new files — no more misplaced components |
+| **global-rules.md** | Sets the AI's behavior — when to ask vs. act, how to communicate, code quality standards | Prevents the AI from changing things you didn't ask about or making assumptions |
+| **product.md** | Describes your product, your users, key workflows, roadmap, and brand voice | The AI understands *what* you're building and makes decisions that fit your product |
+| **tech.md** | Documents your tech stack, coding patterns, database, API structure, testing, deployment | Every file the AI generates follows your stack and conventions consistently |
+| **design.md** | Covers your component library, UI states, spacing, colors, accessibility | The AI produces polished UI with proper loading states, empty states, and responsive design |
+| **structure.md** | Maps your folder layout, file naming rules, and where new files should go | The AI puts files in the right place instead of scattering them randomly |
 
 ## Quick start
 
-1. **Copy** the `.cursor/rules/` folder into your project root
-2. Open Cursor and paste this prompt into a new chat:
+### 1. Copy the rules into your project
 
-> I just added .cursor/rules/ to this project with five template files. Read all five files in .cursor/rules/ and then interview me to fill them in. Start with product.md — ask me what I'm building, who it's for, and how it makes money. Then move through tech.md, design.md, structure.md, and global-rules.md one at a time. For each file, ask me targeted questions, then fill in the [brackets] based on my answers. Skip anything I say "not sure yet" to — we can come back to it later.
+Copy the `.cursor/rules/` folder into your project root. If you don't have a project yet, create an empty folder and open it in Cursor — the AI will help you scaffold it.
 
-3. Answer the AI's questions. It will fill in all five files for you.
-4. **Done** — every Cursor conversation in that project now has full context.
+### 2. Paste this prompt into Cursor
 
-All five files use `alwaysApply: true` in their frontmatter, so Cursor automatically includes them in every interaction. No need to `@` reference them manually.
+Open a **new chat** in Cursor (Agent mode) and paste this:
 
-## Tips for filling in the templates
-
-- **Start with `product.md`** — it's the fastest to fill in and has the biggest impact. Even a rough draft dramatically improves AI output.
-- **`tech.md` and `design.md`** include inline examples for many stacks (Next.js, Django, Rails, SvelteKit, etc.). Pick the ones that match yours and delete the rest.
-- **`structure.md`** is most useful once you have an established folder layout. For brand new projects, fill it in after your initial scaffolding.
-- **`global-rules.md`** works well with minimal changes — the behavioral guardrails are fairly universal. Focus on the Role section.
-- **Don't fill in everything at once.** Start with what you know, and add detail as the project takes shape.
-- **You don't need to know the answers up front.** Use the starter prompt above and let the AI guide you through it conversationally.
-
-## Example: filled-in placeholder
-
-Template version:
 ```
-- [Primary framework, e.g. "Next.js App Router", "Django 5", "Rails 7", "SvelteKit", "FastAPI"].
-  [Default pattern, e.g. "Server Components by default, 'use client' only when interactivity is needed".]
+Switch to Plan mode. Read all five files in .cursor/rules/ — they are templates with
+[bracketed placeholders] that need to be filled in for this project.
+
+Your job is to interview me about my project and then fill in every bracket across all
+five files. I may not be technical, so explain things in plain language and make
+recommendations when I'm unsure.
+
+Start with product.md:
+- Ask me what I'm building, who it's for, and how it will make money.
+- Ask about key user flows, roadmap priorities, brand voice, and competitors.
+
+Then move to tech.md:
+- Based on what I described, RECOMMEND a tech stack with clear reasoning.
+- Present 2-3 options with pros and cons if there are meaningful tradeoffs.
+- Ask about any preferences I already have (languages, frameworks, services).
+- Once we agree on a stack, fill in all the tech conventions and patterns.
+
+Then design.md:
+- Recommend a component library, icon set, and animation approach that fits the stack.
+- Ask about visual style preferences (minimal, bold, playful, etc.).
+- Fill in spacing, color approach, and accessibility level.
+
+Then structure.md:
+- Based on the agreed tech stack, propose a folder structure.
+- Explain what each directory is for in simple terms.
+
+Finally global-rules.md:
+- Ask me about my experience level and how I prefer to work with AI.
+- Fill in the role and behavioral preferences.
+
+For anything I say "not sure yet" or "skip" to, fill in sensible defaults based on
+the rest of my answers and mark them with a comment so I can revisit later.
+
+After filling in each file, show me a summary of what you wrote so I can approve or
+adjust before you move to the next one. Don't edit any file until I confirm.
+
+Start now — ask me about my product.
 ```
 
-Filled-in version:
-```
-- Next.js 14 App Router. Server Components by default — only add 'use client' when you need
-  browser APIs or interactivity.
-```
+### 3. Answer the AI's questions
+
+The AI will walk you through each file one at a time, starting with "what are you building?" You don't need to know technical details — it will explain options in plain language and make recommendations. Just describe your vision and the AI handles the rest.
+
+### 4. Start building
+
+Once all five files are filled in, every future Cursor conversation in your project automatically has full context. The AI knows your stack, your design system, your users, and your conventions. Start a new chat and begin building.
+
+## How it works
+
+All five files use `alwaysApply: true` in their [Cursor frontmatter](https://docs.cursor.com/context/rules-for-ai), which means they're automatically included in every AI interaction. You never need to reference them manually — they're always working in the background.
+
+The `[bracketed placeholders]` include inline examples for many tech stacks (Next.js, Django, Rails, SvelteKit, FastAPI, Flutter, and more), so the AI has concrete options to recommend regardless of what you're building.
+
+## FAQ
+
+**Do I need to know how to code?**
+No. The starter prompt is designed so the AI asks you about your *product* first (what are you building, who's it for) and then recommends technical decisions with explanations. You just need to know what you want to build.
+
+**What if I don't know what tech stack to use?**
+That's the point. Tell the AI what you're building and it will recommend a stack with reasoning. You pick the one that sounds right.
+
+**Can I change things later?**
+Yes. The rule files are just markdown. You can edit them anytime, or start a new chat and ask the AI to update a specific file based on how your project has evolved.
+
+**What if I already have a tech stack?**
+The starter prompt handles that too. When it gets to tech.md, just tell it what you're already using and it will fill in conventions for your stack instead of recommending a new one.
+
+**Does this work with any programming language?**
+Yes. The templates are completely stack-agnostic. The brackets contain examples for web, mobile, backend, and full-stack projects across many languages and frameworks.
 
 ## Contributing
 
-Found a gap? Have a section that's helped your projects? PRs and issues are welcome.
+Found a gap? Have a section that's made your projects better? PRs and issues are welcome.
 
 ## License
 
