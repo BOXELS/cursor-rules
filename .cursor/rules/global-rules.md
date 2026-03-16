@@ -21,6 +21,14 @@ I am a [describe yourself — skill level, background, what you understand vs. w
 - Always preserve existing imports and dependencies unless the change specifically requires removing them.
 - When I say "undo" or "revert," restore the exact previous state. Don't optimize or improve during the revert.
 - If a task requires changes to more than 3 files, list all files you plan to change and get confirmation before starting.
+- Before changes, ask "What is working?" vs "What is broken?" — never rewrite working code unless explicitly requested.
+
+## Security awareness
+
+- Before writing code that renders HTML from external sources, stop and verify it will be sanitized. Never use `dangerouslySetInnerHTML`, `innerHTML`, or `v-html` with unsanitized content.
+- Before writing code that calls a third-party API with a secret key, stop and verify the call goes through a server-side route or edge function — never from the client.
+- Before writing code that checks user roles or permissions, stop and verify the check happens server-side. Client-side role checks are cosmetic, not security.
+- Never trust client-side state for authorization decisions. The server must enforce access control.
 
 ## Communication
 
@@ -38,4 +46,11 @@ I am a [describe yourself — skill level, background, what you understand vs. w
 ## Documentation
 
 - After making architectural or foundational changes, update the README or relevant documentation. Do this without being asked.
-- [Any MCP servers, documentation tools, or other integrations the AI should use — e.g. "Use [MCP server name] for library documentation lookups." Remove this line if none.]
+- After any feature, architecture change, or removal, update relevant docs and cursor rules to reflect the current state. Don't leave stale documentation.
+
+## MCP and structured data
+
+- [List your MCP servers and what each is for — e.g. "Supabase MCP for DB schema inspection", "Stripe MCP for payment debugging", "Browser tools for UI testing." Remove this section if none.]
+- When MCP tools are available for database inspection, ALWAYS use them to verify schema, columns, and RLS policies before writing queries or migrations. Never guess at table structure.
+- When an operation fails against a database or external service, check the actual state via MCP before attempting a fix.
+- Prefer structured data from MCP over assumptions based on memory or naming conventions — column names, types, and relationships drift over time.

@@ -1,6 +1,6 @@
 # cursor-rules
 
-A starter template for [Cursor's](https://cursor.com) `.cursor/rules` — five template files that teach AI everything about your project so it builds what you actually want.
+A starter template for [Cursor's](https://cursor.com) `.cursor/rules` — six template files that teach AI everything about your project so it builds what you actually want.
 
 ## What is this?
 
@@ -8,7 +8,7 @@ When you use Cursor to build an app, the AI starts every conversation knowing no
 
 **Cursor rules fix that.** They're markdown files that live in your project and automatically feed context to the AI in every conversation. The problem is, writing them from scratch is intimidating — especially if you're new to coding.
 
-This template gives you five pre-structured rule files with `[bracketed placeholders]`. You don't need to fill them in manually. Just paste the starter prompt below into Cursor, and the AI will ask you about your project and fill everything in for you — including recommending a tech stack if you don't have one yet.
+This template gives you six pre-structured rule files with `[bracketed placeholders]`. You don't need to fill them in manually. Just paste the starter prompt below into Cursor, and the AI will ask you about your project and fill everything in for you — including recommending a tech stack if you don't have one yet.
 
 ## What's included
 
@@ -18,15 +18,17 @@ This template gives you five pre-structured rule files with `[bracketed placehol
     ├── global-rules.md   # How the AI should behave and communicate with you
     ├── product.md         # What you're building, who it's for, where it's going
     ├── tech.md            # Tech stack, coding conventions, security, deployment
+    ├── security.md        # XSS prevention, secrets, auth, admin access, headers
     ├── design.md          # Visual style, components, colors, accessibility
     └── structure.md       # Folder layout, file naming, where things go
 ```
 
 | File | What it does | Why it matters |
 |---|---|---|
-| **global-rules.md** | Sets the AI's behavior — when to ask vs. act, how to communicate, code quality standards | Prevents the AI from changing things you didn't ask about or making assumptions |
+| **global-rules.md** | Sets the AI's behavior — when to ask vs. act, how to communicate, security awareness, MCP usage | Prevents the AI from changing things you didn't ask about or making assumptions |
 | **product.md** | Describes your product, your users, key workflows, roadmap, and brand voice | The AI understands *what* you're building and makes decisions that fit your product |
 | **tech.md** | Documents your tech stack, coding patterns, database, API structure, testing, deployment | Every file the AI generates follows your stack and conventions consistently |
+| **security.md** | Covers output sanitization, secret management, auth/RBAC, database security, input validation, security headers | The AI never introduces XSS vulnerabilities, exposes API keys client-side, or skips server-side auth checks |
 | **design.md** | Covers your component library, UI states, spacing, colors, accessibility | The AI produces polished UI with proper loading states, empty states, and responsive design |
 | **structure.md** | Maps your folder layout, file naming rules, and where new files should go | The AI puts files in the right place instead of scattering them randomly |
 
@@ -41,11 +43,11 @@ Copy the entire `.cursor` folder (including the dot — it's a hidden folder tha
 Open a **new chat** in Cursor (Agent mode) and paste this:
 -----------------------------------------------------------
 ```
-Switch to Plan mode. Read all five files in .cursor/rules/ — they are templates with
+Switch to Plan mode. Read all six files in .cursor/rules/ — they are templates with
 [bracketed placeholders] that need to be filled in for this project.
 
 Your job is to interview me about my project and then fill in every bracket across all
-five files. I may not be technical, so explain things in plain language and make
+six files. I may not be technical, so explain things in plain language and make
 recommendations when I'm unsure.
 
 Start with product.md:
@@ -57,6 +59,13 @@ Then move to tech.md:
 - Present 2-3 options with pros and cons if there are meaningful tradeoffs.
 - Ask about any preferences I already have (languages, frameworks, services).
 - Once we agree on a stack, fill in all the tech conventions and patterns.
+
+Then security.md:
+- Based on the agreed tech stack, fill in the security placeholders.
+- Ask which third-party APIs will be used and whether they need server-side proxying.
+- Ask about admin/privileged access needs and how roles will be managed.
+- Recommend a sanitization library and security header configuration for the stack.
+- The non-placeholder rules in this file apply to every project — don't skip them.
 
 Then design.md:
 - Recommend a component library, icon set, and animation approach that fits the stack.
@@ -70,6 +79,7 @@ Then structure.md:
 Finally global-rules.md:
 - Ask me about my experience level and how I prefer to work with AI.
 - Fill in the role and behavioral preferences.
+- Ask about MCP servers in use and fill in the MCP section.
 
 For anything I say "not sure yet" or "skip" to, fill in sensible defaults based on
 the rest of my answers and mark them with a comment so I can revisit later.
@@ -87,11 +97,11 @@ The AI will walk you through each file one at a time, starting with "what are yo
 
 ### 4. Start building
 
-Once all five files are filled in, every future Cursor conversation in your project automatically has full context. The AI knows your stack, your design system, your users, and your conventions. Start a new chat and begin building.
+Once all six files are filled in, every future Cursor conversation in your project automatically has full context. The AI knows your stack, your design system, your users, and your conventions. Start a new chat and begin building.
 
 ## How it works
 
-All five files use `alwaysApply: true` in their [Cursor frontmatter](https://docs.cursor.com/context/rules-for-ai), which means they're automatically included in every AI interaction. You never need to reference them manually — they're always working in the background.
+All six files use `alwaysApply: true` in their [Cursor frontmatter](https://docs.cursor.com/context/rules-for-ai), which means they're automatically included in every AI interaction. You never need to reference them manually — they're always working in the background.
 
 The `[bracketed placeholders]` include inline examples for many tech stacks (Next.js, Django, Rails, SvelteKit, FastAPI, Flutter, and more), so the AI has concrete options to recommend regardless of what you're building.
 

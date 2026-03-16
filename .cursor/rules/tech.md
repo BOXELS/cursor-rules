@@ -22,17 +22,38 @@ alwaysApply: true
 
 ## Data and state management
 
-- Validation: [validation library, e.g. "Zod", "Pydantic", "Joi", "class-validator"]. Never trust external data without validating.
+- Validation: [validation library, e.g. "Zod", "Pydantic", "Joi", "class-validator"]. Never trust external data without validating. Validate at every trust boundary — client input, API params, webhook payloads, URL params. Prefer allowlists over denylists.
 - Data fetching: [approach, e.g. "TanStack Query for client-side, server components for initial loads", "SWR", "RTK Query", "built-in framework loaders"]. [Anti-pattern to avoid, e.g. "Never use useEffect for data fetching", "No raw fetch calls without error handling."]
 - State management: [approach, e.g. "React state + context for UI, server state libraries for async data", "Pinia for global state", "Zustand", "Redux Toolkit"]. [Constraint, e.g. "Never mix UI state and server state."]
 
 ## API and security
 
-- API structure: [pattern, e.g. "Next.js Route Handlers in app/api/", "Django REST Framework viewsets", "FastAPI routers", "Express controllers"]. Always return proper status codes and typed responses.
+- API structure: [pattern, e.g. "Next.js Route Handlers in app/api/", "Django REST Framework viewsets", "FastAPI routers", "Express controllers", "Supabase Edge Functions"]. Always return proper status codes and typed responses.
 - Database access: [constraint, e.g. "Never run raw queries from the client — all access goes through server-side routes or server actions", "Use the ORM for all queries", "Parameterized queries only — no string concatenation."]
 - Auth: [approach, e.g. "Middleware for auth checks on protected routes", "Decorator-based auth", "Guard clauses"]. [Anti-pattern, e.g. "Never check auth inside individual page components."]
 - Rate limiting: [approach, e.g. "upstash/ratelimit on all API endpoints", "Django throttle classes", "nginx rate limiting"]. Never expose unprotected endpoints to the public.
-- Secrets: [convention, e.g. "Environment variables with NEXT_PUBLIC_ prefix for client-side", ".env files with python-dotenv"]. Never hardcode API keys, URLs, or secrets.
+
+### Secrets and API keys
+
+- [Secret management approach, e.g. "Environment variables with NEXT_PUBLIC_ prefix for client-safe values", ".env files with python-dotenv"]. Never hardcode API keys, URLs, or secrets.
+- Distinguish between **public keys** (safe for the client — e.g. Supabase anon key, Stripe publishable key) and **secret keys** (server-only — e.g. OpenAI, Stripe secret key, service role keys). Secret keys must never appear in client-side code or bundles.
+- Third-party API calls that require secret keys must go through server-side routes or edge functions. Never call external APIs with secrets directly from the browser. [Proxy approach, e.g. "Supabase Edge Functions", "Next.js Route Handlers", "Express API on Railway".]
+- [Service role key pattern, e.g. "Supabase service role key is used only in Edge Functions and server-side code, never in the client." Remove this line if not applicable.]
+
+### Output sanitization (XSS prevention)
+
+- Never render raw HTML from user input, database content, or external APIs without sanitization.
+- [Sanitization library, e.g. "DOMPurify", "sanitize-html", "bleach"]. Use it at every point where HTML is rendered from a non-hardcoded source.
+- If the framework provides a raw-HTML escape hatch (`dangerouslySetInnerHTML`, `innerHTML`, `v-html`, `{@html}`), it requires sanitized input. Treat every use as a security-sensitive code path.
+- For variable interpolation into HTML templates, escape the values. Never concatenate user-provided strings into HTML.
+- [Content Security Policy, e.g. "CSP headers configured in next.config.js / netlify.toml / helmet middleware." Remove this line if not configured yet.]
+
+### Admin and privileged access
+
+- [Admin route protection, e.g. "Admin pages use ProtectedAdminRoute wrapper", "Django staff_member_required decorator", "RBAC middleware"]. Admin routes must have server-side role verification — never rely solely on hiding UI elements.
+- [Role system, e.g. "Roles stored in user_roles table, checked via roles.includes('admin')", "Django groups and permissions", "CASL ability definitions"]. Describe where roles live and how they're checked.
+- [Audit logging, e.g. "All admin actions logged to security_audit_logs table", "Django admin log", "custom audit middleware". Remove this line if not applicable yet.]
+- Register new admin pages in [admin registry, e.g. "admin_pages table", "admin route config", "Django admin.py". Remove this line if not applicable.]
 
 ## Error handling
 
@@ -44,7 +65,8 @@ alwaysApply: true
 - [ORM or query approach, e.g. "Prisma", "Drizzle", "SQLAlchemy", "raw SQL with parameterized queries", "Supabase client SDK"].
 - Migrations: [approach, e.g. "Supabase migrations in supabase/migrations/", "Alembic", "Prisma Migrate", "Django migrations"]. Never modify production data without a migration.
 - [Naming convention, e.g. "snake_case table names, pluralized", "prefix all tables with app_", etc.]
-- [Row-level security, multi-tenancy, or access control patterns if applicable. Remove this line if not applicable.]
+- [Row-level security / access control, e.g. "RLS enabled on ALL tables. Every new table must have RLS enabled and at least one policy before it's used", "Multi-tenant row isolation via org_id", "Application-level access control in the ORM layer." Remove this line if not applicable.]
+- Always verify table structure via MCP or type definitions before writing queries. Never assume column names or types from memory.
 
 ## Assets and storage
 
