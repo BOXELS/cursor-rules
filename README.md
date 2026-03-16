@@ -28,12 +28,15 @@ These five files are stack-agnostic templates. They work for React, Python, Go, 
 | **design.md** | Covers component library, interaction states, spacing, colors, accessibility | Produces polished UI with proper loading states, empty states, and a11y from the start |
 | **structure.md** | Maps the folder layout, file placement rules, naming conventions | Tells the AI exactly where to put new files — no more misplaced components |
 
-## How to use
+## Quick start
 
 1. **Copy** the `.cursor/rules/` folder into your project root
-2. **Open** each file and replace every `[bracketed placeholder]` with your project's details
-3. **Delete** any lines marked *"Remove this line if not applicable"*
-4. **Done** — every Cursor conversation in that project now has full context
+2. Open Cursor and paste this prompt into a new chat:
+
+> I just added .cursor/rules/ to this project with five template files. Read all five files in .cursor/rules/ and then interview me to fill them in. Start with product.md — ask me what I'm building, who it's for, and how it makes money. Then move through tech.md, design.md, structure.md, and global-rules.md one at a time. For each file, ask me targeted questions, then fill in the [brackets] based on my answers. Skip anything I say "not sure yet" to — we can come back to it later.
+
+3. Answer the AI's questions. It will fill in all five files for you.
+4. **Done** — every Cursor conversation in that project now has full context.
 
 All five files use `alwaysApply: true` in their frontmatter, so Cursor automatically includes them in every interaction. No need to `@` reference them manually.
 
@@ -44,6 +47,7 @@ All five files use `alwaysApply: true` in their frontmatter, so Cursor automatic
 - **`structure.md`** is most useful once you have an established folder layout. For brand new projects, fill it in after your initial scaffolding.
 - **`global-rules.md`** works well with minimal changes — the behavioral guardrails are fairly universal. Focus on the Role section.
 - **Don't fill in everything at once.** Start with what you know, and add detail as the project takes shape.
+- **You don't need to know the answers up front.** Use the starter prompt above and let the AI guide you through it conversationally.
 
 ## Example: filled-in placeholder
 
