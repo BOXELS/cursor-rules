@@ -34,12 +34,12 @@ This template gives you five pre-structured rule files with `[bracketed placehol
 
 ### 1. Copy the rules into your project
 
-Copy the `.cursor/rules/` folder into your project root. If you don't have a project yet, create an empty folder and open it in Cursor — the AI will help you scaffold it.
+Copy the entire `.cursor` folder (including the dot — it's a hidden folder that Cursor looks for automatically) into your project root. If you don't have a project yet, create an empty folder, open it in Cursor, and the AI will help you scaffold it.
 
 ### 2. Paste this prompt into Cursor
 
 Open a **new chat** in Cursor (Agent mode) and paste this:
-
+-----------------------------------------------------------
 ```
 Switch to Plan mode. Read all five files in .cursor/rules/ — they are templates with
 [bracketed placeholders] that need to be filled in for this project.
@@ -49,7 +49,7 @@ five files. I may not be technical, so explain things in plain language and make
 recommendations when I'm unsure.
 
 Start with product.md:
-- Ask me what I'm building, who it's for, and how it will make money.
+- Ask me what I'm building, who it's for, and how it will make money (if that is a goal of the user).
 - Ask about key user flows, roadmap priorities, brand voice, and competitors.
 
 Then move to tech.md:
@@ -79,6 +79,7 @@ adjust before you move to the next one. Don't edit any file until I confirm.
 
 Start now — ask me about my product.
 ```
+-----------------------------------------------------------
 
 ### 3. Answer the AI's questions
 
