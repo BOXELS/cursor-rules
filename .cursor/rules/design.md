@@ -13,6 +13,7 @@ alwaysApply: true
 - Animations: [animation library, e.g. "Framer Motion", "GSAP", "CSS transitions only", "Svelte transitions"]. [Constraint, e.g. "Max 300ms for UI transitions. No animations on first paint."]
 - Dropdowns, popovers, and overlays: [approach, e.g. "Radix primitives via shadcn", "Headless UI", "native library components"]. Must have proper keyboard navigation and dismiss on outside click.
 - Dialogs: [approach, e.g. "shadcn Dialog", "Material Dialog", "custom modal component"]. Never use alert(), window.confirm(), or browser-native dialogs.
+- Searchable dropdowns / autocomplete pickers: never ship mouse-only. Required keys — see Patterns below.
 
 ## States
 
@@ -45,6 +46,23 @@ Every interactive component must account for all of its states. Don't ship a "ha
 - Tables: [approach, e.g. "Sticky header, horizontal scroll on mobile, row hover highlight", "Use TanStack Table for sorting and filtering"]. Never break the table layout on small screens.
 - Images: [approach, e.g. "Always set width and height attributes. Use next/image with proper sizing", "Use lazy loading for below-fold images", "Always include alt text"]. Never cause layout shift on load.
 - Scrollable areas: [approach, e.g. "Visible scroll indicators on content that overflows", "Custom scrollbar styling via the design system"]. Never hide scrollbars on overflowing content.
+
+### Searchable dropdown / autocomplete keyboard navigation
+
+Any search input with a dropdown list of selectable results must support keyboard navigation. Wire this in the same change as the UI — never defer it.
+
+| Key | Action |
+|---|---|
+| **↓ / ↑** | Move highlight through filtered results (`preventDefault`) |
+| **Enter** | Select the highlighted row (`preventDefault`) |
+| **Escape** | Close dropdown, clear search, reset highlight |
+
+- Highlight starts at **-1**; first **↓** selects index 0.
+- Reset highlight to **-1** when the search query changes.
+- After **Enter** on multi-select pickers, refocus the search input so the user can keep typing.
+- Scroll the highlighted row into view (`scrollIntoView({ block: 'nearest' })`).
+- Sync highlight on `onMouseEnter` for each row.
+- Prefer reusing an existing shared autocomplete component if the project has one; for custom inline dropdowns, follow the same key behavior.
 
 ## Accessibility
 

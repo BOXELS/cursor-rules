@@ -1,6 +1,6 @@
 # cursor-rules
 
-A starter template for [Cursor's](https://cursor.com) `.cursor/rules` — six template files that teach AI everything about your project so it builds what you actually want.
+A starter template for [Cursor's](https://cursor.com) `.cursor/rules` — seven template files that teach AI everything about your project so it builds what you actually want.
 
 ## What is this?
 
@@ -8,19 +8,20 @@ When you use Cursor to build an app, the AI starts every conversation knowing no
 
 **Cursor rules fix that.** They're markdown files that live in your project and automatically feed context to the AI in every conversation. The problem is, writing them from scratch is intimidating — especially if you're new to coding.
 
-This template gives you six pre-structured rule files with `[bracketed placeholders]`. You don't need to fill them in manually. Just paste the starter prompt below into Cursor, and the AI will ask you about your project and fill everything in for you — including recommending a tech stack if you don't have one yet.
+This template gives you seven pre-structured rule files with `[bracketed placeholders]`. You don't need to fill them in manually. Just paste the starter prompt below into Cursor, and the AI will ask you about your project and fill everything in for you — including recommending a tech stack if you don't have one yet.
 
 ## What's included
 
 ```
 .cursor/
 └── rules/
-    ├── global-rules.md   # How the AI should behave and communicate with you
+    ├── global-rules.md    # How the AI should behave and communicate with you
     ├── product.md         # What you're building, who it's for, where it's going
     ├── tech.md            # Tech stack, coding conventions, security, deployment
     ├── security.md        # XSS prevention, secrets, auth, admin access, headers
     ├── design.md          # Visual style, components, colors, accessibility
-    └── structure.md       # Folder layout, file naming, where things go
+    ├── structure.md       # Folder layout, file naming, where things go
+    └── documentation.md   # Docs maintenance + "update docs" trigger workflow
 ```
 
 | File | What it does | Why it matters |
@@ -31,6 +32,19 @@ This template gives you six pre-structured rule files with `[bracketed placehold
 | **security.md** | Covers output sanitization, secret management, auth/RBAC, database security, input validation, security headers | The AI never introduces XSS vulnerabilities, exposes API keys client-side, or skips server-side auth checks |
 | **design.md** | Covers your component library, UI states, spacing, colors, accessibility | The AI produces polished UI with proper loading states, empty states, and responsive design |
 | **structure.md** | Maps your folder layout, file naming rules, and where new files should go | The AI puts files in the right place instead of scattering them randomly |
+| **documentation.md** | Keeps `docs/` and rules in sync; defines the "update documentation" trigger | Stops stale docs after features ship; saying "update docs" runs a full find → edit → confirm workflow |
+
+### Also baked into the templates (no extra files)
+
+Learnings that repeatedly saved real projects — already woven into the files above:
+
+- **Scoped git commits** — when multiple Cursor chats work in one repo, only stage files *this* task touched (`tech.md`)
+- **Migration risk tiers** — additive migrations can auto-apply; destructive ones must ask first (`tech.md`)
+- **Shared API mount auth** — never put unscoped auth on a router mounted at `/api` (or similar) (`tech.md`)
+- **Config over hardcoded limits** — upload sizes, rate caps, flags come from settings, not magic numbers (`tech.md`)
+- **Canonical git branch** — CI/deploy/docs-sync must use the real default branch name (`tech.md`)
+- **Searchable dropdown keyboard nav** — ↓/↑/Enter/Escape required on autocomplete pickers (`design.md`)
+- **Backup before major edits** — confirm / branch / run a backup before hard-to-reverse refactors (`global-rules.md`)
 
 ## Quick start
 
@@ -43,11 +57,11 @@ Copy the entire `.cursor` folder (including the dot — it's a hidden folder tha
 Open a **new chat** in Cursor (Agent mode) and paste this:
 -----------------------------------------------------------
 ```
-Switch to Plan mode. Read all six files in .cursor/rules/ — they are templates with
+Switch to Plan mode. Read all seven files in .cursor/rules/ — they are templates with
 [bracketed placeholders] that need to be filled in for this project.
 
 Your job is to interview me about my project and then fill in every bracket across all
-six files. I may not be technical, so explain things in plain language and make
+seven files. I may not be technical, so explain things in plain language and make
 recommendations when I'm unsure.
 
 Start with product.md:
@@ -59,6 +73,9 @@ Then move to tech.md:
 - Present 2-3 options with pros and cons if there are meaningful tradeoffs.
 - Ask about any preferences I already have (languages, frameworks, services).
 - Once we agree on a stack, fill in all the tech conventions and patterns.
+- Ask which git branch is canonical (main vs master) and fill that in.
+- Keep the migration risk tiers, scoped-commit rules, and shared-mount auth warning —
+  those apply to every project; only fill the stack-specific brackets around them.
 
 Then security.md:
 - Based on the agreed tech stack, fill in the security placeholders.
@@ -71,15 +88,24 @@ Then design.md:
 - Recommend a component library, icon set, and animation approach that fits the stack.
 - Ask about visual style preferences (minimal, bold, playful, etc.).
 - Fill in spacing, color approach, and accessibility level.
+- Keep the searchable-dropdown keyboard checklist — it applies to every UI project.
 
 Then structure.md:
 - Based on the agreed tech stack, propose a folder structure.
 - Explain what each directory is for in simple terms.
+- Ask where agent-facing docs will live (usually docs/) and note it.
+
+Then documentation.md:
+- Confirm the docs folder path and naming convention.
+- Explain the "update docs" / "update documentation" trigger so I know I can say
+  that phrase later to refresh docs after a feature ships.
+- Fill placeholders; keep the trigger workflow intact.
 
 Finally global-rules.md:
 - Ask me about my experience level and how I prefer to work with AI.
 - Fill in the role and behavioral preferences.
 - Ask about MCP servers in use and fill in the MCP section.
+- Ask about backup-before-major-edits preference.
 
 For anything I say "not sure yet" or "skip" to, fill in sensible defaults based on
 the rest of my answers and mark them with a comment so I can revisit later.
@@ -97,11 +123,15 @@ The AI will walk you through each file one at a time, starting with "what are yo
 
 ### 4. Start building
 
-Once all six files are filled in, every future Cursor conversation in your project automatically has full context. The AI knows your stack, your design system, your users, and your conventions. Start a new chat and begin building.
+Once all seven files are filled in, every future Cursor conversation in your project automatically has full context. The AI knows your stack, your design system, your users, and your conventions. Start a new chat and begin building.
+
+**Later:** after shipping a feature, say **"update documentation"** (or "update docs") — the agent will find related docs, update them, create a new doc only if needed, sync cursor rules, and list what changed.
 
 ## How it works
 
-All six files use `alwaysApply: true` in their [Cursor frontmatter](https://docs.cursor.com/context/rules-for-ai), which means they're automatically included in every AI interaction. You never need to reference them manually — they're always working in the background.
+All seven files use `alwaysApply: true` in their [Cursor frontmatter](https://docs.cursor.com/context/rules-for-ai), which means they're automatically included in every AI interaction. You never need to reference them manually — they're always working in the background.
+
+Files can be `.md` or `.mdc` — both work with the same frontmatter (`description`, `alwaysApply`, optional `globs`).
 
 The `[bracketed placeholders]` include inline examples for many tech stacks (Next.js, Django, Rails, SvelteKit, FastAPI, Flutter, and more), so the AI has concrete options to recommend regardless of what you're building.
 
@@ -121,6 +151,9 @@ The starter prompt handles that too. When it gets to tech.md, just tell it what 
 
 **Does this work with any programming language?**
 Yes. The templates are completely stack-agnostic. The brackets contain examples for web, mobile, backend, and full-stack projects across many languages and frameworks.
+
+**Why is there a separate documentation.md?**
+Projects grow stale docs fast when agents ship features without updating `docs/`. That file defines a concrete trigger: say "update docs" and the agent must find, edit, create if needed, sync rules, and report what changed — without asking you which files to touch.
 
 ## Contributing
 

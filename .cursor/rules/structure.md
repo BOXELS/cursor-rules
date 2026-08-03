@@ -26,6 +26,7 @@ alwaysApply: true
 ├── [public or static]/             # Static assets
 ├── [config]/                       # Configuration files
 ├── [tests or __tests__]/           # Global/integration tests
+├── [docs]/                          # Agent-facing reference docs (architecture, features)
 └── [database or migrations]/       # Database schema and migrations
 ```
 
@@ -37,8 +38,10 @@ alwaysApply: true
 - Type definitions go in [types path, e.g. "src/types/", "co-located with the feature that owns them", "src/shared/types/"].
 - API routes go in [API path, e.g. "app/api/", "src/pages/api/", "server/routes/"].
 - Database migrations go in [migration path, e.g. "supabase/migrations/", "prisma/migrations/", "alembic/versions/"].
+- Agent/reference documentation goes in [doc folder, e.g. "docs/"] — see `documentation.md` for naming and the "update docs" trigger.
 - Test files go [test location, e.g. "next to the file they test with .test.ts suffix", "in a __tests__/ directory mirroring src/", "in a top-level tests/ directory"].
 - Configuration files (env, linting, build) stay in the project root.
+- Cursor rules live in `.cursor/rules/` as `.md` or `.mdc` files with YAML frontmatter (`description`, `alwaysApply`, optional `globs`).
 
 ## Naming conventions
 

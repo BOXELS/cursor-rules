@@ -22,6 +22,7 @@ I am a [describe yourself — skill level, background, what you understand vs. w
 - When I say "undo" or "revert," restore the exact previous state. Don't optimize or improve during the revert.
 - If a task requires changes to more than 3 files, list all files you plan to change and get confirmation before starting.
 - Before changes, ask "What is working?" vs "What is broken?" — never rewrite working code unless explicitly requested.
+- Before major refactors or large multi-file edits, [backup approach, e.g. "run the project backup script", "create a git branch / stash", "confirm with the user"]. Don't skip this when the change is hard to reverse.
 
 ## Security awareness
 
@@ -47,6 +48,7 @@ I am a [describe yourself — skill level, background, what you understand vs. w
 
 - After making architectural or foundational changes, update the README or relevant documentation. Do this without being asked.
 - After any feature, architecture change, or removal, update relevant docs and cursor rules to reflect the current state. Don't leave stale documentation.
+- Full workflow (including the "update docs" / "update documentation" trigger phrases): see `documentation.md`. Follow that file whenever the user asks to update docs.
 
 ## MCP and structured data
 

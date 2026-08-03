@@ -32,6 +32,8 @@ alwaysApply: true
 - Database access: [constraint, e.g. "Never run raw queries from the client — all access goes through server-side routes or server actions", "Use the ORM for all queries", "Parameterized queries only — no string concatenation."]
 - Auth: [approach, e.g. "Middleware for auth checks on protected routes", "Decorator-based auth", "Guard clauses"]. [Anti-pattern, e.g. "Never check auth inside individual page components."]
 - Rate limiting: [approach, e.g. "upstash/ratelimit on all API endpoints", "Django throttle classes", "nginx rate limiting"]. Never expose unprotected endpoints to the public.
+- **Shared mount / router auth (CRITICAL):** Never attach unscoped auth middleware to a router that is mounted on a shared prefix (e.g. `app.use('/api', router)` with `router.use(requireAuth)`). That blocks every later route under the same prefix — including public checkout, webhooks, and health checks. Scope middleware to a subpath (`router.use('/admin', requireAuth)`), mount the router on a narrow path (`app.use('/api/admin', …)`), or apply auth per-handler. Always read the server entrypoint’s mount order before adding API middleware.
+- **Config over hardcoded limits:** Never hardcode upload size limits, rate caps, feature flags, or similar tunables in application code. Read them from [settings approach, e.g. "a site_settings table / SiteSettingsService", "environment config", "feature-flag service"] so ops can change them without a deploy.
 
 ### Secrets and API keys
 
@@ -67,6 +69,15 @@ alwaysApply: true
 - [Naming convention, e.g. "snake_case table names, pluralized", "prefix all tables with app_", etc.]
 - [Row-level security / access control, e.g. "RLS enabled on ALL tables. Every new table must have RLS enabled and at least one policy before it's used", "Multi-tenant row isolation via org_id", "Application-level access control in the ORM layer." Remove this line if not applicable.]
 - Always verify table structure via MCP or type definitions before writing queries. Never assume column names or types from memory.
+- After schema changes, [regenerate types, e.g. "npx supabase gen types … > src/types/database.types.ts", "prisma generate", "drizzle-kit generate"]. Keep typed clients in sync with the live schema.
+
+### Migration risk tiers (ask before destructive)
+
+Classify every migration before applying it to a shared/production database:
+
+**Auto-apply OK** (additive / non-destructive) — examples: `CREATE TABLE` / `CREATE INDEX` / `CREATE TYPE`, nullable `ADD COLUMN` (or with a safe default), new RLS policies that only widen access, new RPCs/functions that do not drop existing objects, `ALTER TYPE … ADD VALUE`, seed inserts into **new** tables only.
+
+**Must ask the user first** (data loss or overwrite risk) — examples: `DROP TABLE` / `DROP COLUMN` / `DROP TYPE` / `DROP FUNCTION`, `TRUNCATE`, unbounded `DELETE`, `ALTER COLUMN … SET NOT NULL` when existing rows may violate it, narrowing type changes, `UPDATE` backfills that overwrite existing values, rename-and-drop rebuilds. When in doubt, ask and explain what could be lost.
 
 ## Assets and storage
 
@@ -75,7 +86,17 @@ alwaysApply: true
 ## Git
 
 - Commits: [format, e.g. "conventional commits (feat:, fix:, chore:)", "descriptive present-tense messages"]. One logical change per commit. Never commit secrets or .env files.
+- **Canonical branch:** [e.g. "main", "master"]. Anything that pulls from GitHub (CI, docs sync, deploy hooks, edge functions) must use this branch name — wrong defaults silently ship stale code. Document it here and in any tooling that defaults to `main` or `master`.
 - [Branch strategy if applicable, e.g. "Feature branches off main, squash merge PRs." Remove this line if not applicable.]
+
+### Scoped commits (parallel agent / multi-chat work)
+
+Assume other Cursor chats or agents may have uncommitted work in the same working tree.
+
+1. Check `git status` before committing.
+2. Stage **only** the files you changed for this task — `git add path/to/file`, never `git add .` or `git add -A` unless the user explicitly wants everything committed.
+3. Leave unrelated modified/untracked files alone; they may belong to parallel work.
+4. Never commit secrets, `.env`, or credential files.
 
 ## Testing
 
